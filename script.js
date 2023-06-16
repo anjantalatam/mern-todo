@@ -13,8 +13,18 @@ app.use("/", express.static(path.resolve(__dirname, "assets")));
 
 app.use(express.json());
 
+app.get("/api/get", async (_, res) => {
+  const dbRes = await TodoModel.find();
+  const todos = dbRes.map((todo) => ({ record: todo.record }));
+  res.json(todos);
+});
 app.post("/api/create", async (req, res) => {
-  console.log(req.body);
+  const record = req.body;
+  const dbRes = await TodoModel.create(record);
+  console.log(dbRes);
+  res.json({ status: "ok" });
+});
+
   res.json({ status: "ok" });
 });
 
