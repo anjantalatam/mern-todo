@@ -7,11 +7,20 @@ const newObj = new mongoose.Schema({
   field1: String,
 });
 
-const TodoSchema = new mongoose.Schema({
-  record: { type: String, required: true },
-  date: { type: Number, default: 100 },
-  obj: newObj,
-});
+const TodoSchema = new mongoose.Schema(
+  {
+    record: { type: String, required: true },
+    date: { type: Number, default: Date.now },
+    obj: newObj,
+  },
+  { collection: "my-todo" }
+);
+
+// mongoose by default makes collection name if not specified
+
+// 'TodoModel' => 'todomodel' + 's'
+
+// You can specify explicitly by passing as a second prop to mongoose.Schema
 
 const model = mongoose.model("TodoModel", TodoSchema);
 
