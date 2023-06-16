@@ -53,6 +53,16 @@ app.post("/api/modify", async (req, res) => {
   res.json({ status: "ok" });
 });
 
+app.post("/api/delete", async (req, res) => {
+  const { record } = req.body;
+
+  await TodoModel.deleteOne({
+    record,
+  });
+
+  return res.json({ status: "ok" });
+});
+
 app.listen(PORT, () => {
   console.log(`server up on port ${PORT}. http://localhost:${PORT}`);
 });
