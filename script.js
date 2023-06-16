@@ -18,12 +18,37 @@ app.get("/api/get", async (_, res) => {
   const todos = dbRes.map((todo) => ({ record: todo.record }));
   res.json(todos);
 });
+
 app.post("/api/create", async (req, res) => {
   const record = req.body;
   const dbRes = await TodoModel.create(record);
   console.log(dbRes);
   res.json({ status: "ok" });
 });
+
+app.post("/api/modify", async (req, res) => {
+  const { old: oldTitle, new: newTitle } = req.body;
+
+  if (newTitle == null) {
+    return res.status(400).json({ error: "New Title can't be null" });
+  }
+
+  // $set -> changes only record value in the scheme
+  // {...prevObj, record:newValue}
+
+  // if $set is not used then whole entity is replaced with new one. We will loose other keys like Data..
+
+  const dbRes = await TodoModel.updateOne(
+    {
+      record: oldTitle,
+    },
+    {
+      $set: {
+        record: newTitle,
+        lastUpdatedAt: Date.now(),
+      },
+    }
+  );
 
   res.json({ status: "ok" });
 });
