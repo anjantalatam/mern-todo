@@ -39,15 +39,19 @@ class item {
   }
 
   async edit(input) {
-    const newInput = prompt("Enter new msg:", input);
-    input.value = newInput;
-    await fetch("/api/modify", {
-      method: "POST",
-      body: JSON.stringify({ old: input.value, new: newInput }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    const newInput = prompt("Enter new msg:", input.value);
+
+    // newInput is null if cancel is clicked on prompt open
+    if (newInput !== null) {
+      await fetch("/api/modify", {
+        method: "POST",
+        body: JSON.stringify({ old: input.value, new: newInput }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      input.value = newInput;
+    }
   }
 
   async remove(item, value) {
